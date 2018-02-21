@@ -6,14 +6,13 @@ public class RelativeMovement : MonoBehaviour {
 
 	[SerializeField] private Transform target;  // Shows up in editor so we can link player 
 	public float rotSpeed = 15.0f; // Speed that character will rotate
+	
 	//2 public float moveSpeed = 6.0f; // Movement speed of character
-
 	//3 public float jumpSpeed = 15.0f; 		// Speed of vertical jump
 	//3 public float gravity = -9.8f;			// Force of gravity acting down on player
 	//3 public float terminalVelocity = -10.0f;	// Maximum speed character can fall
 	//3 public float minFall = -1.5f;			// Minumum speed character can fall
-
-    public float pushForce = 3.0f;          // 6b Force at which player will push something
+    //6 public float pushForce = 3.0f;          // Force at which player will push something
 
 	//2 private CharacterController _charController; 	
 	//3 private float _vertSpeed;						
@@ -55,7 +54,7 @@ public class RelativeMovement : MonoBehaviour {
 
 		//5 _animator.SetFloat ("Speed", movement.sqrMagnitude);				
 
-		//4 all of this raycasting logic
+		//4 
 		/*
 		bool hitGround = false;
 		RaycastHit hit;
@@ -68,22 +67,20 @@ public class RelativeMovement : MonoBehaviour {
 			if (Input.GetButtonDown ("Jump")) { 	// If jump button is pressed 
 				_vertSpeed = jumpSpeed;				// Set vertical speed to jump speed
 			} else {
-				//5a(apart of 4b changed with 5b)_vertSpeed = minFall;				// Else reset vertical speed back to minimum 
-				_vertSpeed = -0.1f;		//5b
-				_animator.SetBool("Jumping", false);	//5b
+				(apart of 4b changed with 5b)_vertSpeed = minFall;	// Else reset vertical speed back to minimum 
+				//5 _vertSpeed = -0.1f;		
+				//5 _animator.SetBool("Jumping", false);	
 			}
 		} else {
 			_vertSpeed += gravity * 5 * Time.deltaTime; // If not not on ground apply gravity until terminal velocity reached
 			if (_vertSpeed < terminalVelocity) {
 				_vertSpeed = terminalVelocity;
 			}
-			*/ 
+			 
+			//5 if (_contact != null) {
+			//5	_animator.SetBool("Jumping", true);
+			//5 }
 			
-			/*
-			//5 next if statement
-			if (_contact != null) {
-				_animator.SetBool("Jumping", true);
-			}
 				
 			if (_charController.isGrounded) {						// Check if capsule collider is hitting an edge while not standing on ground
 				if (Vector3.Dot (movement, _contact.normal) < 0) {	// If facing towards edge when falling then set new movement direction
@@ -92,12 +89,15 @@ public class RelativeMovement : MonoBehaviour {
 					movement += _contact.normal * moveSpeed;		// Else if facing away from edge then add to existing movement vector
 				}
 			}
-			*/ // end of 5
-		//4} // Make sure to uncomment bracket for 4 changes
+		}
+		*/ 
+		//4
+		
 			
 			
-		//3 this whole if else statement
-		/*if (_charController.isGrounded) {		// isGrounded is a method of CharacterController to check if character is on ground or not
+		//3 
+		/*
+		if (_charController.isGrounded) {		// isGrounded is a method of CharacterController to check if character is on ground or not
 			if (Input.GetButtonDown ("Jump")) { 	// If jump button is pressed
 				_vertSpeed = jumpSpeed;				// Set vertical speed to jump speed
 			} else {
@@ -108,9 +108,11 @@ public class RelativeMovement : MonoBehaviour {
 			if (_vertSpeed < terminalVelocity) {
 				_vertSpeed = terminalVelocity;
 			}
-		}*/
-		// 3movement.y = _vertSpeed;  // Apply result to movements y vector
-
+		}
+		*/
+		//3
+		
+		//3 movement.y = _vertSpeed;  // Apply result to movements y vector
 		//2 movement *= Time.deltaTime; 	// Always want multiply by Time.deltaTime to make frame-rate independent
 		//2 _charController.Move(movement); // Move is a function belonging to the CharacterController class (handles all horizontal movement)	
 	}
@@ -119,11 +121,12 @@ public class RelativeMovement : MonoBehaviour {
 	/*
 	void OnControllerColliderHit(ControllerColliderHit hit) {
 		_contact = hit;
-
-        Rigidbody body = hit.collider.attachedRigidbody;    //6b Checks if object player collides with has RigidBody
-        if (body != null && !body.isKinematic) {            // if a body was hit and that body is kinematic
-            body.velocity = hit.moveDirection * pushForce;      // apply velocity to the physics body
-        }
+		
+		//6 Rigidbody body = hit.collider.attachedRigidbody;    // Checks if object player collides with has RigidBody
+        //6 if (body != null && !body.isKinematic) {            // if a body was hit and that body is kinematic
+            //6 body.velocity = hit.moveDirection * pushForce;      // apply velocity to the physics body
+        //6}
 	}
 	*/
+	//4
 }
