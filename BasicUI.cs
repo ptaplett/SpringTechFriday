@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,19 +34,13 @@ public class BasicUI : MonoBehaviour
 			GUI.Box (new Rect (posX, posY, width, height),                  
 				new GUIContent ("Equipped", image));
 		}
-
 		posX = 10;
 		posY = height + buffer;
-
 		foreach (string item in itemList) {
 			if (GUI.Button (new Rect (posX, posY, width, height), "Equip " + item)) {
 				Managers.Inventory.EquipItem (item);
-			}
-			// posX += width + Buffer  // apart of 1b, moves down below 2b after implementation of 2b
-			*/
+			}			
 			
-			//2
-			/*
 			if (item == "Health") {
 				if (GUI.Button(new Rect(posX, posY + height+buffer, width,
 					height), "Use Health")) {
@@ -54,7 +48,6 @@ public class BasicUI : MonoBehaviour
 					Managers.Player.ChangeHealth(25);
 				}
 			}
-
 			posX += width+buffer;  // (remove previous statement on line 45)
 			*/
 

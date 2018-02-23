@@ -1,28 +1,28 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-//2 [RequireComponent(typeof(CharacterController))] Forces unity to make sure GameObject has a component of argument pased
+[RequireComponent(typeof(CharacterController))] // Forces unity to make sure GameObject has a component of argument pased
 public class RelativeMovement : MonoBehaviour {
 
 	[SerializeField] private Transform target;  // Shows up in editor so we can link player 
 	public float rotSpeed = 15.0f; // Speed that character will rotate
-	
-	//2 public float moveSpeed = 6.0f; // Movement speed of character
-	//3 public float jumpSpeed = 15.0f; 		// Speed of vertical jump
-	//3 public float gravity = -9.8f;			// Force of gravity acting down on player
-	//3 public float terminalVelocity = -10.0f;	// Maximum speed character can fall
-	//3 public float minFall = -1.5f;			// Minumum speed character can fall
-    //6 public float pushForce = 3.0f;          // Force at which player will push something
 
-	//2 private CharacterController _charController; 	
-	//3 private float _vertSpeed;						
-	//4 private ControllerColliderHit _contact;		 	// Will store collision data 
+	public float moveSpeed = 6.0f; // Movement speed of character
+	public float jumpSpeed = 15.0f; 		// Speed of vertical jump
+	public float gravity = -9.8f;			// Force of gravity acting down on player
+	public float terminalVelocity = -10.0f;	// Maximum speed character can fall
+	public float minFall = -1.5f;			// Minumum speed character can fall
+	//6 public float pushForce = 3.0f;          // Force at which player will push something
+
+	private CharacterController _charController; 	
+	private float _vertSpeed;						
+	private ControllerColliderHit _contact;		 	// Will store collision data 
 	//5 private Animator _animator;						
 
 
 	void Start() {
-		//2 _charController = GetComponent<CharacterController> (); // Returns all the other components attached to character
-		//3 _vertSpeed = minFall;									// Set initial fall speed to minimum
+		_charController = GetComponent<CharacterController> (); // Returns all the other components attached to character
+		_vertSpeed = minFall;									// Set initial fall speed to minimum
 		//5 _animator = GetComponent<Animator>();					
 	}
 
@@ -34,11 +34,9 @@ public class RelativeMovement : MonoBehaviour {
 		float horInput = Input.GetAxis("Horizontal");	// Check 'a' and 'd' keys
 		float vertInput = Input.GetAxis("Vertical");	// Check 'w' and 's' keys
 		if (horInput != 0 || vertInput != 0) {			// If keys were pressed
-			movement.x = horInput;						// Update vector with input
-			//2 movement.x = horInput * moveSpeed;  						
-			movement.z = vertInput;
-			//2 movement.z = vertInput * moveSpeed; 						
-			//2 movement = Vector3.ClampMagnitude(movement, moveSpeed); 	// Limits diagonal movement so it doesn't double up speed
+			movement.x = horInput * moveSpeed;  		// Update vector with input					
+			movement.z = vertInput * moveSpeed; 						
+			movement = Vector3.ClampMagnitude(movement, moveSpeed); 	// Limits diagonal movement so it doesn't double up speed
 
 			// Next 4 lines are for calculating movement direction as a vector
 			Quaternion tmp = target.rotation;								// store the targets rotation to restore later
@@ -46,29 +44,28 @@ public class RelativeMovement : MonoBehaviour {
 			movement = target.TransformDirection(movement); 				// Transforms from local coordinates to global
 			target.rotation = tmp;											// restore the targets rotation
 
-			transform.rotation = Quaternion.LookRotation(movement); 		// Applies movement direction to the character
-																			// by converting vector3 into quaternion
-			//1 Quaternion direction = Quaternion.LookRotation(movement); 		// Converts vector 3 into quaternion
-			//1 transform.rotation = Quaternion.Lerp (transform.rotation, direction, rotSpeed * Time.deltaTime);  // Interpolate (move a small amount) between current rotation and new rotation
+			//transform.rotation = Quaternion.LookRotation(movement); 		// Applies movement direction to the character
+			// by converting vector3 into quaternion
+			Quaternion direction = Quaternion.LookRotation(movement); 		// Converts vector 3 into quaternion
+			transform.rotation = Quaternion.Lerp (transform.rotation, direction, rotSpeed * Time.deltaTime);  // Interpolate (move a small amount) between current rotation and new rotation
 		}
 
 		//5 _animator.SetFloat ("Speed", movement.sqrMagnitude);				
 
-		//4 
-		/*
+
 		bool hitGround = false;
 		RaycastHit hit;
 		if (_vertSpeed < 0 && Physics.Raycast (transform.position, Vector3.down, out hit)) {
 			float check = (_charController.height + _charController.radius) / 1.9f; // check distance is slightly beyond bottom of the capsule
 			hitGround = hit.distance <= check; // Sets hitGround to true/false depending on how far hit.distance is
 		}
-			alternate if / else
+
 		if (hitGround) {		// if character is standing on the ground
 			if (Input.GetButtonDown ("Jump")) { 	// If jump button is pressed 
 				_vertSpeed = jumpSpeed;				// Set vertical speed to jump speed
 			} else {
-				(apart of 4b changed with 5b)_vertSpeed = minFall;	// Else reset vertical speed back to minimum 
-				//5 _vertSpeed = -0.1f;		
+				_vertSpeed = minFall;	// Else reset vertical speed back to minimum 
+				//5 _vertSpeed = -0.1f; 	
 				//5 _animator.SetBool("Jumping", false);	
 			}
 		} else {
@@ -90,35 +87,14 @@ public class RelativeMovement : MonoBehaviour {
 				}
 			}
 		}
-		*/ 
-		//4
-		
-			
-			
-		//3 
-		/*
-		if (_charController.isGrounded) {		// isGrounded is a method of CharacterController to check if character is on ground or not
-			if (Input.GetButtonDown ("Jump")) { 	// If jump button is pressed
-				_vertSpeed = jumpSpeed;				// Set vertical speed to jump speed
-			} else {
-				_vertSpeed = minFall;				// Else reset vertical speed back to minimum 
-			}
-		} else {
-			_vertSpeed += gravity * 5 * Time.deltaTime; // If not not on ground apply gravity until terminal velocity reached
-			if (_vertSpeed < terminalVelocity) {
-				_vertSpeed = terminalVelocity;
-			}
-		}
-		*/
-		//3
-		
-		//3 movement.y = _vertSpeed;  // Apply result to movements y vector
-		//2 movement *= Time.deltaTime; 	// Always want multiply by Time.deltaTime to make frame-rate independent
-		//2 _charController.Move(movement); // Move is a function belonging to the CharacterController class (handles all horizontal movement)	
+
+
+		movement.y = _vertSpeed;  // Apply result to movements y vector
+		movement *= Time.deltaTime; 	// Always want multiply by Time.deltaTime to make frame-rate independent
+		_charController.Move(movement); // Move is a function belonging to the CharacterController class (handles all horizontal movement)	
 	}
 
-	//4 Store collision data in the callback when a collision is detected.
-	/*
+	// Store collision data in the callback when a collision is detected.
 	void OnControllerColliderHit(ControllerColliderHit hit) {
 		_contact = hit;
 		
@@ -127,6 +103,4 @@ public class RelativeMovement : MonoBehaviour {
             //6 body.velocity = hit.moveDirection * pushForce;      // apply velocity to the physics body
         //6}
 	}
-	*/
-	//4
 }
